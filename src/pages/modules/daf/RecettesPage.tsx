@@ -22,7 +22,7 @@ export default function RecettesPage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     moto_id: '', locataire_id: '', semaine_debut: new Date().toISOString().split('T')[0],
-    jours_travailles: 5, montant_attendu: 25000, montant_recu: 0, charges_roulement: 10000, statut: 'en_attente', notes: ''
+    jours_travailles: 5, montant_attendu: 25000, montant_recu: 0, statut: 'en_attente', notes: ''
   });
   const [saving, setSaving] = useState(false);
 
@@ -81,8 +81,7 @@ export default function RecettesPage() {
     const estInvestisseur = motoData?.proprietaire === 'investisseur';
 
     // Charges de roulement par moto (10 000 FCFA/mois). On répartit ici sur la recette.
-    // Charges de roulement saisies par l'utilisateur (variables d'une recette à l'autre)
-    const CHARGE_ROULEMENT = Number(form.charges_roulement) || 0;
+    const CHARGE_ROULEMENT = 10000;
     const net = Math.max(form.montant_recu - CHARGE_ROULEMENT, 0);
 
     // RÈGLE DE RÉINVESTISSEMENT :
@@ -151,7 +150,7 @@ export default function RecettesPage() {
 
     setSaving(false);
     setShowForm(false);
-    setForm({ moto_id: '', locataire_id: '', semaine_debut: new Date().toISOString().split('T')[0], jours_travailles: 5, montant_attendu: 25000, montant_recu: 0, charges_roulement: 10000, statut: 'en_attente', notes: '' });
+    setForm({ moto_id: '', locataire_id: '', semaine_debut: new Date().toISOString().split('T')[0], jours_travailles: 5, montant_attendu: 25000, montant_recu: 0, statut: 'en_attente', notes: '' });
     fetchRecettes();
   };
 
@@ -305,12 +304,6 @@ export default function RecettesPage() {
                   <input type="number" value={form.montant_recu} onChange={e => setForm({ ...form, montant_recu: parseInt(e.target.value) || 0 })}
                     className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-[#F7F8FA] focus:outline-none focus:ring-2 focus:ring-[#F5821F]" />
                 </div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">Charges de roulement (FCFA)</label>
-                <input type="number" value={form.charges_roulement} onChange={e => setForm({ ...form, charges_roulement: parseInt(e.target.value) || 0 })}
-                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-[#F7F8FA] focus:outline-none focus:ring-2 focus:ring-[#F5821F]" />
-                <p className="text-xs text-gray-400 mt-1">Montant variable (carburant, entretien…) déduit pour calculer le revenu net. Ignoré pour les motos d'investisseurs.</p>
               </div>
               {form.jours_travailles < 5 && (
                 <div className="bg-orange-50 border border-orange-200 rounded-xl px-3 py-2 text-xs text-orange-800">
