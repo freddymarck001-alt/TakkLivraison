@@ -95,6 +95,7 @@ export default function Layout() {
         <Sidebar
           notifCount={notifCount}
           msgCount={msgCount}
+          onNavigate={() => setMobileMenuOpen(false)}
         />
       </div>
 
