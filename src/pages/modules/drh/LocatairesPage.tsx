@@ -59,15 +59,31 @@ export default function LocatairesPage() {
   const handleSave = async () => {
     setSaving(true);
     const { type_contrat, notes, ...rest } = form;
-    const payload = { ...rest, notes: composerNotes(type_contrat, notes) };
+    // numero_contrat est UNIQUE en base : une valeur vide doit être envoyée comme null,
+    // sinon deux locataires sans numéro provoquent une erreur de doublon.
+    const payload = {
+      ...rest,
+      numero_contrat: rest.numero_contrat?.trim() ? rest.numero_contrat.trim() : null,
+      notes: composerNotes(type_contrat, notes),
+    };
+    let error = null;
     if (editing) {
-      await supabase.from('locataires').update({ ...payload, updated_at: new Date().toISOString() }).eq('id', editing.id);
+      const res = await supabase.from('locataires').update({ ...payload, updated_at: new Date().toISOString() }).eq('id', editing.id);
+      error = res.error;
     } else {
-      await supabase.from('locataires').insert(payload);
+      const res = await supabase.from('locataires').insert(payload);
+      error = res.error;
     }
     setSaving(false);
+    if (error) {
+      alert("Enregistrement impossible : " + (error.message.includes('duplicate') || error.message.includes('unique')
+        ? "ce numéro de contrat est déjà utilisé. Choisissez-en un autre ou laissez le champ vide."
+        : error.message));
+      return;
+    }
     setShowForm(false);
     setEditing(null);
+    setForm(defaultForm);
     fetch();
   };
 
