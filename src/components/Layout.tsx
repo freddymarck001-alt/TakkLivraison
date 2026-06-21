@@ -43,6 +43,11 @@ export default function Layout() {
   const currentPage = location.pathname.slice(1) || 'dashboard';
   const pageTitle = PAGE_TITLES[currentPage] || 'TAKK Livraison';
 
+  // Ferme automatiquement le menu mobile dès qu'on change de page
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   useEffect(() => {
     if (!profile) return;
 
@@ -90,6 +95,7 @@ export default function Layout() {
         <Sidebar
           notifCount={notifCount}
           msgCount={msgCount}
+          onNavigate={() => setMobileMenuOpen(false)}
         />
       </div>
 
