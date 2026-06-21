@@ -73,9 +73,9 @@ export default function MessagingPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-10rem)] flex gap-4">
+    <div className="h-[calc(100vh-10rem)] flex flex-col md:flex-row gap-4">
       {/* List panel */}
-      <div className="w-72 flex-shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
+      <div className="w-full md:w-72 flex-shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col overflow-hidden max-h-64 md:max-h-none">
         <div className="p-3 border-b border-gray-100 space-y-2">
           <button onClick={() => setShowCompose(true)}
             className="w-full flex items-center justify-center gap-2 bg-[#1B2A4A] text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-[#243660] transition">
@@ -115,7 +115,7 @@ export default function MessagingPage() {
       </div>
 
       {/* Message view */}
-      <div className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+      <div className="flex-1 min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
         {selected ? (
           <>
             <div className="p-5 border-b border-gray-100">
@@ -127,7 +127,7 @@ export default function MessagingPage() {
               </div>
             </div>
             <div className="p-5 flex-1 overflow-y-auto">
-              <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{selected.contenu}</p>
+              <p className="text-sm text-gray-700 whitespace-pre-wrap break-words leading-relaxed">{selected.contenu}</p>
             </div>
             <div className="p-3 border-t border-gray-100">
               <button
