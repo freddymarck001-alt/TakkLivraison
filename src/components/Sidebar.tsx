@@ -60,10 +60,9 @@ const navItems: NavItem[] = [
 interface SidebarProps {
   notifCount?: number;
   msgCount?: number;
-  onNavigate?: () => void;
 }
 
-export default function Sidebar({ notifCount = 0, msgCount = 0, onNavigate }: SidebarProps) {
+export default function Sidebar({ notifCount = 0, msgCount = 0 }: SidebarProps) {
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -74,11 +73,6 @@ export default function Sidebar({ notifCount = 0, msgCount = 0, onNavigate }: Si
   const role = profile.role as Role;
   const currentPage = location.pathname.slice(1) || 'dashboard';
   const visibleItems = navItems.filter(item => item.roles.includes(role));
-
-  const go = (path: string) => {
-    navigate(path);
-    onNavigate?.();
-  };
 
   const groups = [
     { label: 'Principal', items: visibleItems.filter(i => ['dashboard', 'fleet'].includes(i.id)) },
@@ -132,7 +126,7 @@ export default function Sidebar({ notifCount = 0, msgCount = 0, onNavigate }: Si
                 return (
                   <button
                     key={item.id}
-                    onClick={() => go(`/${item.id}`)}
+                    onClick={() => navigate(`/${item.id}`)}
                     className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-all relative group
                       ${isActive
                         ? 'bg-[#F5821F] text-white font-semibold'
@@ -179,7 +173,7 @@ export default function Sidebar({ notifCount = 0, msgCount = 0, onNavigate }: Si
         )}
         <div className={`flex gap-2 ${collapsed ? 'justify-center' : ''}`}>
           <button
-            onClick={() => go('/profile')}
+            onClick={() => navigate('/profile')}
             className={`flex items-center gap-2 px-3 py-2 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition text-xs flex-1 ${collapsed ? 'justify-center' : ''}`}
             title={collapsed ? 'Mon profil' : undefined}
           >
